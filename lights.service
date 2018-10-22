@@ -3,7 +3,7 @@ Description=rpi-lights
 [Service]
 ExecStart=/home/garrett/rpi-lights/lights.py --config /home/garrett/rpi-lights/my_config.yaml
 Restart=always
-RestartSec=3
+RestartSec=30
 User=garrett
 Group=users
 [Install]
