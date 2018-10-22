@@ -1,10 +1,10 @@
 [Unit]
 Description=rpi-lights
 [Service]
-ExecStart=/home/garrett/rpi-lights/lights.py --config /home/garrett/rpi-lights/my_config.yaml
+ExecStart=/usr/bin/lights --config /etc/lights.yaml
 Restart=always
 RestartSec=30
-User=garrett
-Group=users
+User=nobody
+Group=uucp
 [Install]
 WantedBy=multi-user.target
