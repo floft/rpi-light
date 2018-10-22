@@ -12,7 +12,7 @@ hardware sitting around from that project and decided I might as well put it to
 use.
 
 # Setup
-Check and add yourself to the groups for your serial ports in /dev:
+Check and add yourself to the groups for your serial ports in */dev*:
 
     $ ls -l /dev | grep tty
     ...
@@ -22,13 +22,66 @@ Check and add yourself to the groups for your serial ports in /dev:
     $ sudo usermod -a -G tty,uucp your_username
     $ logout # Only takes effect when you log back in
 
-Install [pyserial](https://github.com/pyserial/pyserial) with
-`sudo pacman -S python-pyserial` if on Arch, or more generally
-`pip install pyserial`.
+Install depends (either with `pacman` on Arch or `pip` on most anything):
+
+    $ sudo pacman -S python-tornado python-yaml python-pyserial
+    $ pip install tornado pyyaml pyserial
+
+Copy the config file and make your desired changes, making sure to change the key:
+
+    $ cp config.yaml my_config.yaml
+    $ vim my_config.yaml # ...
 
 Edit the *lights.service* file setting the path to the Python file and the
 desired user/group you want it to run as, then install via:
 
-    $ sudo mv lights.service /etc/systemd/system/
+    $ sudo cp lights.service /etc/systemd/system/
+    $ sudo chown root:root /etc/systemd/system/lights.service
     $ sudo systemctl enable lights
     $ sudo systemctl start lights
+
+Update *nginx* config:
+    http {
+        upstream lights {
+            server 127.0.0.1:8080;
+        }
+
+        ...
+
+        server {
+            ...
+
+            location /lights/ {
+                proxy_pass_header Server;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Scheme $scheme;
+                proxy_pass http://lights;
+            }
+
+            ...
+        }
+    }
+
+And restart *nginx*:
+
+    $ sudo systemctl restart nginx
+
+Monitor for debugging:
+
+    $ sudo journalctl -u lights.service -f
+
+Then, to make this easy to use on your phone, install
+[IFTTT](https://ifttt.com/) (if this then that). Then, you can for example
+create a widget for your homescreen that will toggle your lights:
+
+ - Enable [webhooks](https://ifttt.com/maker_webhooks)
+ - Go to "My Applets" (center button at bottom) in the app
+ - Click top "+" icon to add your own applet
+ - Make "this" a "button widget"
+ - Make "that" a webhook with "https://example.com/lights/hook?action=toggle&key=..."
+
+Or, you could turn on/off (change action to "on" or "off") your lights when you
+exit an area (or similarly enter) by searching for "location" or make it turn
+on/off at a certain time searching for "date & time".

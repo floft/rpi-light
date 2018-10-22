@@ -1,0 +1,9 @@
+# Note: if root is not blank, it needs a / at the beginning
+root: /lights
+# Run Tornado on this port
+port: 8080
+# Path to serial port
+serial: /dev/ttyUSB0
+# Key that will allow turning on/off the lights via a web hook,
+# so make sure nobody else knows this key
+key: secret_123
