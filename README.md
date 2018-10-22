@@ -40,7 +40,10 @@ desired user/group you want it to run as, then install via:
     $ sudo systemctl enable lights
     $ sudo systemctl start lights
 
-Update *nginx* config:
+Update your *nginx* config to point to this lights Tornado instance at the
+right subdirectory (make sure it matches the "root" option in your config
+file):
+
     http {
         upstream lights {
             server 127.0.0.1:8080;
@@ -64,11 +67,12 @@ Update *nginx* config:
         }
     }
 
-And restart *nginx*:
+Restart *nginx*:
 
     $ sudo systemctl restart nginx
 
-Monitor for debugging:
+Monitor the output of Tornado for debugging, verifying that it's receiving the
+on/off/toggle requests correctly:
 
     $ sudo journalctl -u lights.service -f
 
