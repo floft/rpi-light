@@ -1,0 +1,10 @@
+[Unit]
+Description=rpi-lights
+[Service]
+ExecStart=/home/garrett/rpi-lights/lights.py
+Restart=always
+RestartSec=3
+User=garrett
+Group=users
+[Install]
+WantedBy=multi-user.target
