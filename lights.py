@@ -87,8 +87,6 @@ class WebHookHandler(BaseHandler):
         action = self.get_argument("action", "")
 
         if key == config["key"]:
-            self.write("Correct")
-
             if action == "on":
                 self.lights.on()
                 self.write(json.dumps({"result": "on"}))
