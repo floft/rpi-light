@@ -47,6 +47,9 @@ class Lights:
         self.update()
         return self.state
 
+    def get(self):
+        return self.state
+
 def demo_toggle(serial_port="/dev/ttyUSB0", seconds=3):
     """ Demo lights by toggling on/off every so many seconds """
     l = Lights(serial_port)
@@ -86,6 +89,8 @@ class WebHookHandler(BaseHandler):
         key = self.get_argument("key", "")
         action = self.get_argument("action", "")
 
+        logging.info("Before: "+str(self.lights.get()))
+
         if key == config["key"]:
             if action == "on":
                 self.lights.on()
@@ -104,6 +109,10 @@ class WebHookHandler(BaseHandler):
                 self.write(json.dumps({"error": "invalid-action"}))
         else:
             self.write(json.dumps({"error": "invalid-key"}))
+
+        self.set_header("Content-type", "application/json")
+
+        logging.info("After: "+str(self.lights.get()))
 
 class Application(tornado.web.Application):
     """
