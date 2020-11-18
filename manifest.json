@@ -1,0 +1,8 @@
+{
+  "domain": "rpi_lights",
+  "name": "RPi Lights",
+  "documentation": "https://github.com/floft/rpi-lights",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": []
+}
