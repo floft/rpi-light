@@ -109,4 +109,4 @@ class RPiLight(LightEntity):
 
         This is the only method that should fetch new data for Home Assistant.
         """
-        pass
+        self._state = self._call("state")

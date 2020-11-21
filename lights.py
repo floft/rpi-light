@@ -105,6 +105,9 @@ class WebHookHandler(BaseHandler):
                     True: "on",
                 }
                 self.write(json.dumps({"result": bool_str[result]}))
+            elif action == "state":
+                state = "on" if self.lights.get() else "off"
+                self.write(json.dumps({"result": state}))
             else:
                 self.write(json.dumps({"error": "invalid-action"}))
         else:
