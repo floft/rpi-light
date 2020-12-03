@@ -79,12 +79,10 @@ class RPiLight(LightEntity):
                     _LOGGER.error("RPi Lights Error: " + result["error"])
         except ValueError:
             _LOGGER.error("RPi Lights Error: Could not parse JSON")
-        except TypeError:
-            _LOGGER.error("RPi Lights Error: type error, e.g. connection refused")
         except urllib.error.HTTPError as e:
-            _LOGGER.error('RPi Lights Error HTTP Code: ' + e.code)
+            _LOGGER.error('RPi Lights Error HTTP Code: ' + str(e.code))
         except urllib.error.URLError as e:
-            _LOGGER.error('RPi Lights Error: ' + e.reason)
+            _LOGGER.error('RPi Lights Error: ' + str(e.reason))
 
         return state
 
